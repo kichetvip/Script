@@ -1,0 +1,61 @@
+-- Teleport GUI with Keybind (T) + Draggable
+-- by kietHub 
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local SetButton = Instance.new("TextButton")
+local TpButton = Instance.new("TextButton")
+
+ScreenGui.Parent = game.CoreGui
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.Size = UDim2.new(0, 200, 0, 100)
+Frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+
+-- 🟢 Cho phép kéo thả Frame
+Frame.Active = true
+Frame.Draggable = true
+
+SetButton.Parent = Frame
+SetButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+SetButton.Size = UDim2.new(0.9, 0, 0.4, 0)
+SetButton.Position = UDim2.new(0.05, 0, 0.1, 0)
+SetButton.Text = " Set Vị Trí"
+
+TpButton.Parent = Frame
+TpButton.BackgroundColor3 = Color3.fromRGB(0, 255, 100)
+TpButton.Size = UDim2.new(0.9, 0, 0.4, 0)
+TpButton.Position = UDim2.new(0.05, 0, 0.55, 0)
+TpButton.Text = " Teleport"
+
+-- Biến lưu vị trí
+local savedPos = nil
+local UserInputService = game:GetService("UserInputService")
+
+-- Lưu vị trí
+SetButton.MouseButton1Click:Connect(function()
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        savedPos = char.HumanoidRootPart.CFrame
+        SetButton.Text = "✅ Đã Lưu"
+    end
+end)
+
+-- Teleport bằng nút GUI
+TpButton.MouseButton1Click:Connect(function()
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") and savedPos then
+        char.HumanoidRootPart.CFrame = savedPos
+    end
+end)
+
+-- Teleport bằng phím T
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.T then
+        local char = game.Players.LocalPlayer.Character
+        if char and char:FindFirstChild("HumanoidRootPart") and savedPos then
+            char.HumanoidRootPart.CFrame = savedPos
+        end
+    end
+end)
