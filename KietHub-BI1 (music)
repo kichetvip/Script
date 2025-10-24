@@ -1,0 +1,77 @@
+--// KietHub BreakIn Music 
+--// Made by Kiet 
+
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "KietHub - BreakIn Music ",
+    LoadingTitle = "KietHub",
+    LoadingSubtitle = "Nghe nhạc vui vẻ",
+    KeySystem = false,
+})
+
+-----------------------------------------------------
+--  Tab Music
+-----------------------------------------------------
+local MusicTab = Window:CreateTab("Music ")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remote = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("Sounds")
+
+local SoundID = ""
+local Volume = 10
+local Client = false
+local Keys = {'trolling57', 'trolling56', 'Cracky4', "TestingKey", "TestKey"}
+
+MusicTab:CreateInput({
+    Name = "Enter Id Here",
+    PlaceholderText = "VD: 123456789",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        SoundID = Text
+    end,
+})
+
+-- Chỉnh âm lượng
+MusicTab:CreateSlider({
+    Name = " Volume",
+    Range = {1, 100},
+    Increment = 1,
+    Suffix = " Volume",
+    CurrentValue = 10,
+    Callback = function(Value)
+        Volume = Value
+    end,
+})
+
+-- Phát nhạc
+MusicTab:CreateButton({
+    Name = "Play Music",
+    Callback = function()
+        if SoundID == "" then
+            Rayfield:Notify({
+                Title = "ID Not entered",
+                Content = "Please enter your ID",
+                Duration = 2
+            })
+            return
+        end
+
+        Remote:FireServer("rbxassetid://" .. tostring(SoundID), Client, Volume, Keys[math.random(1, #Keys)])
+
+        Rayfield:Notify({
+            Title = "Music is playing",
+            Content = "ID: " .. SoundID .. " | Volume: " .. Volume,
+            Duration = 3
+        })
+    end,
+})
+
+------------------------------------------------------
+--  Thông báo khởi động
+-----------------------------------------------------
+Rayfield:Notify({
+    Title = "KietHub BreakIn Music",
+    Content = "Nghe nhạc vui vẻ ",
+    Duration = 4
+})
