@@ -1,0 +1,7 @@
+if game.PlaceId == 4620170611 then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kichetvip/Script/refs/heads/main/KietHub-BI1%20(music)"))()
+end
+
+if game.PlaceId == 10253248401 then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kichetvip/Script/refs/heads/main/Kiethub-EPT"))()
+end
