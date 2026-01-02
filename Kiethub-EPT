@@ -12,14 +12,14 @@ local Window = Rayfield:CreateWindow({
 local Players = game:GetService("Players")
 local lp = Players.LocalPlayer
 
------------------------------------------------------
--- Tab Powers (full skills)
------------------------------------------------------
+
+-- Tab Powers
+
 local PowersTab = Window:CreateTab("Powers")
 
 local powers = {
     ["Lava"] = {"Lava Katana","Lava Ball","Magam Fists","Lava Dash","Volcano Sentry","Magma Spikes","Nibiru"},
-    ["Gamepass"] = {"Cruel Sun","Rocket Launcher"},
+    ["Gamepass"] = {"Cruel Sun"},
     ["Bone"] = {"Bone Scythe","Blaster","Bones Barrage","Flying Bone","Bone Surge","Twin Blasters","Judgement Blast"},
     ["Darkness"] = {"Shadow Sword","Unseen Hands","Unseen Barrage","Dark Duo","Abyss","Dark Hold","Dark Arc"},
     ["Light"] = {"Light Saber","Light Ball","Light Orbs","Blinding Light","Shooting Star","Light Speed","Light Beam"},
@@ -36,7 +36,7 @@ local powers = {
     ["Devil"] = {"Devil Sword","Evil Bullet","Fangs Barrage","Evil Flash","Demon Orb","Demon Lock","Dark Tsunami"},
     ["Space"] = {"Space Gun","Blackhole Orb","Moon Splitter","Asteroid Belt","Meteor Jam","Cosmic Remote","Space Saucer"},
     ["Super Sonic"] = {"Sonic Blaster","Sonic Barrage","Sonic Twister","Rebound Blast","Rebound Teleport","Sonic Boom","Super Sonic Wave"},
-    ["Rebirth"] = {"Dark Flames","Draedron's Tech","Yoru","Plasma Orbs","Red Saucer","Undead Staff","Draedon's Tech.Mech"},
+    ["Rebirth"] = {"Dark Flames","Yoru","Plasma Orbs","Red Saucer","Undead Staff"},
 }
 
 for category, list in pairs(powers) do
