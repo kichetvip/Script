@@ -25,7 +25,7 @@ local powers = {
     ["Light"] = {"Light Saber","Light Ball","Light Orbs","Blinding Light","Shooting Star","Light Speed","Light Beam"},
     ["Nature"] = {"Christmas Tree Sword","Plantoid","Spore Bombs","Nature's Blessing","Nuclear Spore","Pine Burst","Nature's Wrath"},
     ["Ice"] = {"Frost Staff","Frost Fire Ball","Ice Disk","Frost Fire Ball","Snow Ball","Ultracold Aura","Ice Spikes"},
-    ["Thunder"] = {"Thunder Staff","Bolt","Barrage","Discharge","Flying Nimbus","Lighting Strike","Storm"},
+    ["Thunder"] = {"Thunder Staff","Bolt","Barrage","Discharge","Flying Nimbus","Lightning Strike","Storm"},
     ["Earth"] = {"Tectonic Hamer","Stone Throw","Rocks Barrage","Large Boulder","Burrow","Stone Henge","Earth Spikes"},
     ["Fire"] = {"Fire Sword","Fire Ball","Fire Fly","Fire Bomb","Comet","Combust","Fire Shower"},
     ["Technology"] = {"Hyper Sword","Phonton Blast","Twin-Photon Blash","Tesla Turret","Orbital","Tesseract","Hyper Slash"},
@@ -36,7 +36,7 @@ local powers = {
     ["Devil"] = {"Devil Sword","Evil Bullet","Fangs Barrage","Evil Flash","Demon Orb","Demon Lock","Dark Tsunami"},
     ["Space"] = {"Space Gun","Blackhole Orb","Moon Splitter","Asteroid Belt","Meteor Jam","Cosmic Remote","Space Saucer"},
     ["Super Sonic"] = {"Sonic Blaster","Sonic Barrage","Sonic Twister","Rebound Blast","Rebound Teleport","Sonic Boom","Super Sonic Wave"},
-    ["Rebirth"] = {"Dark Flames","Draedron's Tech","Yoru","Plasma Orbs","Red Saucer","Undead Staff"},
+    ["Rebirth"] = {"Dark Flames","Draedron's Tech","Yoru","Plasma Orbs","Red Saucer","Undead Staff","Draedon's Tech.Mech"},
 }
 
 for category, list in pairs(powers) do
