@@ -115,7 +115,7 @@ PlayerTab:CreateToggle({
     Callback = function(Value) lockJump = Value end,
 })
 
--- Loop khóa chỉ số mượt mà cho ROG Flow Z13
+
 RunService.Stepped:Connect(function()
     local char = lp.Character
     if char then
