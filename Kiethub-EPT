@@ -2,9 +2,9 @@
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "KietHub Release 1.7 By Kiet (EPT)",
+    Name = "KietHub Release 1.7 By Kiet (This project is open source and licensed.)",
     LoadingTitle = "KietHub v1.7",
-    LoadingSubtitle = "Draedon's Tech Updated",
+    LoadingSubtitle = "Update Mớiiii",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "KietHubConfig",
@@ -56,7 +56,7 @@ for category, list in pairs(powers) do
     end
 end
 
--- ================= TAB REBIRTH =================
+--New Tab REBIRTH 
 local RebirthTab = Window:CreateTab("Rebirth & Special", 4483362458)
 
 local rebirthSkills = {
@@ -80,7 +80,7 @@ for _, skill in ipairs(rebirthSkills) do
     })
 end
 
--- ================= TAB PLAYER =================
+--TAB PLAYER 
 local PlayerTab = Window:CreateTab("Player", 4483345998)
 local currentSpeed = 16
 local currentJump = 50
@@ -130,6 +130,6 @@ end)
 Rayfield:LoadConfiguration()
 Rayfield:Notify({
     Title = "KietHub Updated",
-    Content = "Version 1.7 Ready! Draedon's Tech added.",
+    Content = "Version 1.7 Ready!.",
     Duration = 5
 })
