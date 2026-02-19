@@ -67,7 +67,7 @@ local RebirthTab = Window:CreateTab("Rebirth & Special", 4483362458)
 local rebirthSkills = {
     "Draedon's Tech", "Elysian Beam", "Bubble Flail", "Frost Fire Bomb", 
     "Halloween Sword", "Poison Serpent", "Dark Flames", "Yoru", 
-    "Plasma Orbs", "Red Saucer", "Undead Staff", "Cruel Sun", "Cool Slap",
+    "Plasma Orbs", "Red Saucer", "Undead Staff", "Cruel Sun", "Cold Slap",
 }
 
 RebirthTab:CreateSection("Special / Rebirth Skills")
