@@ -30,16 +30,16 @@ local PowersTab = Window:CreateTab("Powers", 4483362458)
 
 local powers = {
     ["Water"] = {"Jellyfish", "Bubbles", "Aqua Trident", "Big Tsunami", "Water Beam", "Bubble Dash"},
-    ["Lava"] = {"Lava Katana","Lava Ball","Magam Fists","Lava Dash","Volcano Sentry","Magma Spikes","Nibiru"},
+    ["Lava"] = {"Lava Katana","Lava Ball","Magma Fists","Lava Dash","Volcano Sentry","Magma Spikes","Nibiru"},
     ["Bone"] = {"Bone Scythe","Blaster","Bones Barrage","Flying Bone","Bone Surge","Twin Blasters","Judgement Blast"},
     ["Darkness"] = {"Shadow Sword","Unseen Hands","Unseen Barrage","Dark Duo","Abyss","Dark Hold","Dark Arc"},
     ["Light"] = {"Light Saber","Light Ball","Light Orbs","Blinding Light","Shooting Star","Light Speed","Light Beam"},
     ["Nature"] = {"Christmas Tree Sword","Plantoid","Spore Bombs","Nature's Blessing","Nuclear Spore","Pine Burst","Nature's Wrath"},
-    ["Ice"] = {"Frost Staff","Frost Fire Ball","Ice Disk","Frost Fire Ball","Snow Ball","Ultracold Aura","Ice Spikes"},
+    ["Ice"] = {"Frost Staff","Frost Fire Ball","Ice Disk","Frost Fire Bomb","Snow Ball","Ultracold Aura","Ice Spikes"},
     ["Thunder"] = {"Thunder Staff","Bolt","Barrage","Discharge","Flying Nimbus","Lightning Strike","Storm"},
-    ["Earth"] = {"Tectonic Hamer","Stone Throw","Rocks Barrage","Large Boulder","Burrow","Stone Henge","Earth Spikes"},
+    ["Earth"] = {"Tectonic Hammer","Stone Throw","Rocks Barrage","Large Boulder","Burrow","Stone Henge","Earth Spikes"},
     ["Fire"] = {"Fire Sword","Fire Ball","Fire Fly","Fire Bomb","Comet","Combust","Fire Shower"},
-    ["Technology"] = {"Hyper Sword","Phonton Blast","Twin-Photon Blash","Tesla Turret","Orbital","Tesseract","Hyper Slash"},
+    ["Technology"] = {"Hyper Sword","Photon Blast","Twin-Photon Blast","Tesla Turret","Orbital","Tesseract","Hyper Slash"},
     ["Gravity"] = {"Gravity Katana","Heavy Infliction","Tectonic Barrage","Gravity Orb","Tectonic Burst","Zero Gravity","Gravity Globe"},
     ["Time"] = {"Time Scepter","Temporal Gate","Warp Barrage","Tempo Beam","Time Trap","Warp Bomb","Grand Clock"},
     ["Crystal"] = {"Crystal Cleaver","Crystal Mine","Energy Crash","Energy Crown","Crystal Eruption","Energy Crystal","Crystal Surge"},
@@ -135,6 +135,6 @@ end)
 Rayfield:LoadConfiguration()
 Rayfield:Notify({
     Title = "KietHub Updated",
-    Content = "Version 1.7 Ready!.",
+    Content = "Version 1.7 Ready!",
     Duration = 5
 })
