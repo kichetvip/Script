@@ -2,9 +2,9 @@
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "KietHub Release 1.7 By Kiet (This project is open source and licensed.)",
+    Name = "KietHub Release 1.7 By Kiet (Open Source & Licensed)",
     LoadingTitle = "KietHub v1.7",
-    LoadingSubtitle = "Update Mớiiii",
+    LoadingSubtitle = "New Update!",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "KietHubConfig",
@@ -16,16 +16,17 @@ local Window = Rayfield:CreateWindow({
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local RS = game:GetService("ReplicatedStorage")
+-- Using a safer check for RemoteEvent
+local Remote = RS:WaitForChild("RemoteEvent", 10) 
 local lp = Players.LocalPlayer
-local Remote = RS:WaitForChild("RemoteEvent")
 
---// Hàm lấy Humanoid an toàn
+--// Safe Humanoid Getter
 local function getHumanoid()
     local char = lp.Character or lp.CharacterAdded:Wait()
     return char:WaitForChild("Humanoid")
 end
 
--- ================= TAB POWERS =================
+-- ================= POWERS TAB =================
 local PowersTab = Window:CreateTab("Powers", 4483362458)
 
 local powers = {
@@ -55,13 +56,15 @@ for category, list in pairs(powers) do
         PowersTab:CreateButton({
             Name = skill,
             Callback = function()
-                Remote:FireServer("equip_mystery_spell", skill)
+                if Remote then
+                    Remote:FireServer("equip_mystery_spell", skill)
+                end
             end
         })
     end
 end
 
---New Tab REBIRTH 
+-- ================= REBIRTH TAB =================
 local RebirthTab = Window:CreateTab("Rebirth & Special", 4483362458)
 
 local rebirthSkills = {
@@ -75,17 +78,19 @@ for _, skill in ipairs(rebirthSkills) do
     RebirthTab:CreateButton({
         Name = skill,
         Callback = function()
-            Remote:FireServer("equip_mystery_spell", skill)
-            Rayfield:Notify({
-                Title = "KietHub",
-                Content = "Đã trang bị: " .. skill,
-                Duration = 2
-            })
+            if Remote then
+                Remote:FireServer("equip_mystery_spell", skill)
+                Rayfield:Notify({
+                    Title = "KietHub",
+                    Content = "Equipped: " .. skill,
+                    Duration = 2
+                })
+            end
         end
     })
 end
 
---TAB PLAYER 
+-- ================= PLAYER TAB =================
 local PlayerTab = Window:CreateTab("Player", 4483345998)
 local currentSpeed = 16
 local currentJump = 50
@@ -120,7 +125,7 @@ PlayerTab:CreateToggle({
     Callback = function(Value) lockJump = Value end,
 })
 
-
+-- Handle speed/jump locking
 RunService.Stepped:Connect(function()
     local char = lp.Character
     if char then
