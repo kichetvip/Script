@@ -1,33 +1,208 @@
---// KietHub Release 1.7 by Kiet
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+--[[
+    ================================================================
+    ▶ KIETHUB EXECUTION SUITE
+    ▶ Version: 1.7 [Ultimate Cross-Platform Edition]
+    ▶ UI Framework: WindUI (Dark Theme Distribution)
+    ▶ Developer Core: Kiet
+    ▶ Mobile Compatibility: Enhanced (Floating Action Button Integrated)
+    ================================================================
+--]]
 
-local Window = Rayfield:CreateWindow({
-    Name = "KietHub Release 1.7 By Kiet (Open Source & Licensed)",
-    LoadingTitle = "KietHub v1.7",
-    LoadingSubtitle = "New Update!",
-    ConfigurationSaving = {
-        Enabled = true,
-        FolderName = "KietHubConfig",
-        FileName = "MainHub"
-    },
-    KeySystem = false,
-})
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
+-- // [ Core Services & Environment References ]
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local RS = game:GetService("ReplicatedStorage")
--- Using a safer check for RemoteEvent
-local Remote = RS:WaitForChild("RemoteEvent", 10) 
+local UserInputService = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
 local lp = Players.LocalPlayer
+local Remote = RS:WaitForChild("RemoteEvent", 10)
 
---// Safe Humanoid Getter
-local function getHumanoid()
-    local char = lp.Character or lp.CharacterAdded:Wait()
-    return char:WaitForChild("Humanoid")
+-- // [ Runtime State Management ]
+local currentSpeed, currentJump = 16, 50
+local lockSpeed, lockJump = false, false
+local ESP_Enabled, ESP_Names = false, false
+local tpTargetName = ""
+
+-- // [ Window Core Initialization ]
+local Window = WindUI:CreateWindow({
+    Title = "KietHub v1.7 | Ultimate Edition",
+    Author = "by Kiet",
+    Icon = "solar:star-fall-minimalistic-bold-duotone",
+    Size = UDim2.fromOffset(600, 520),
+    Transparent = true,
+    Theme = "Dark",
+})
+
+-- // [ Global Keybind Configuration (PC) ]
+Window:SetToggleKey(Enum.KeyCode.RightControl)
+
+-- =================================================================
+-- [ FEATURE: MOBILE SMART FLOATING TOGGLE BUTTON ]
+-- =================================================================
+local MobileToggle = Instance.new("ScreenGui")
+local ToggleBtn = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+
+MobileToggle.Name = "KietHub_MobileMatrix"
+-- Tìm phân vùng lưu trữ GUI an toàn chống quét giải thuật của game
+MobileToggle.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui or lp:WaitForChild("PlayerGui")
+MobileToggle.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+ToggleBtn.Name = "ToggleBtn"
+ToggleBtn.Parent = MobileToggle
+ToggleBtn.BackgroundColor3 = Color3.fromHex("#11111b") -- Khớp Dark Theme của WindUI
+ToggleBtn.Position = UDim2.new(0.05, 0, 0.2, 0) -- Tọa độ mặc định góc trên bên trái
+ToggleBtn.Size = UDim2.new(0, 48, 0, 48) -- Kích thước chuẩn không che mắt game thủ
+ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.Text = "K"
+ToggleBtn.TextColor3 = Color3.fromHex("#cdd6f4")
+ToggleBtn.TextSize = 18
+
+UICorner.CornerRadius = UDim.new(0, 12) -- Bo góc sang xịn mịn
+UICorner.Parent = ToggleBtn
+
+UIStroke.Color = Color3.fromHex("#FF4B30") -- Viền cam/đỏ lực lưỡng tạo điểm nhấn
+UIStroke.Thickness = 1.5
+UIStroke.Parent = ToggleBtn
+
+-- [ Thuật toán Kéo Thả (Draggable) mượt mà tối ưu cho cả Cảm ứng & Chuột ]
+local dragging, dragInput, dragStart, startPos
+ToggleBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = ToggleBtn.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+ToggleBtn.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        ToggleBtn.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- [ Logic Kích Hoạt Ẩn/Hiện Toàn Bộ UI ]
+local WindUIScreenGui = nil
+ToggleBtn.MouseButton1Click:Connect(function()
+    if not WindUIScreenGui or not WindUIScreenGui.Parent then
+        -- Quét tìm ScreenGui gốc của hệ thống WindUI để can thiệp trạng thái
+        for _, gui in ipairs(CoreGui:GetChildren()) do
+            if gui:IsA("ScreenGui") and (gui.Name:match("Wind") or gui:FindFirstChild("Main")) then
+                WindUIScreenGui = gui; break
+            end
+        end
+        if not WindUIScreenGui then
+            for _, gui in ipairs(lp:WaitForChild("PlayerGui"):GetChildren()) do
+                if gui:IsA("ScreenGui") and (gui.Name:match("Wind") or gui:FindFirstChild("Main")) then
+                    WindUIScreenGui = gui; break
+                end
+            end
+        end
+    end
+    
+    if WindUIScreenGui then
+        WindUIScreenGui.Enabled = not WindUIScreenGui.Enabled
+    else
+        -- Cơ chế khẩn cấp nếu Executor không cấp quyền can thiệp tầng sâu
+        pcall(function() Window:Toggle() end)
+    end
+end)
+
+-- =================================================================
+-- [ MODULE 1: SYSTEM OVERVIEW & DEPLOYMENT INFORMATION ]
+-- =================================================================
+local AboutTab = Window:Tab({ Title = "About", Icon = "solar:info-circle-bold" })
+
+AboutTab:Section({ Title = "Developer Credentials" })
+AboutTab:Button({
+    Title = "GitHub Repository",
+    Desc = "Copy the official developer GitHub directory to clipboard",
+    Icon = "github",
+    Callback = function()
+        setclipboard("https://github.com/kichetvip")
+        WindUI:Notify({ Title = "KietHub Systems", Content = "GitHub link successfully copied!" })
+    end
+})
+AboutTab:Button({
+    Title = "Discord Developer Profile",
+    Desc = "Unique Identity: 1133562946048491562",
+    Icon = "solar:chat-round-dots-bold",
+    Callback = function()
+        setclipboard("1133562946048491562")
+        WindUI:Notify({ Title = "KietHub Systems", Content = "Discord ID successfully copied!" })
+    end
+})
+
+-- =================================================================
+-- [ MODULE 2: VECTOR TELEPORTATION MATRIX ]
+-- =================================================================
+local TPTab = Window:Tab({ Title = "Teleport", Icon = "solar:map-point-bold" })
+
+local function GetPlayerNames()
+    local list = {}
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= lp then table.insert(list, p.Name) end
+    end
+    return list
 end
 
--- ================= POWERS TAB =================
-local PowersTab = Window:CreateTab("Powers", 4483362458)
+TPTab:Section({ Title = "Target Acquisition" })
+
+local PlayerDropdown = TPTab:Dropdown({
+    Title = "Select Target Profile",
+    Multi = false,
+    Values = GetPlayerNames(),
+    Value = nil,
+    Callback = function(v) tpTargetName = v end
+})
+
+TPTab:Button({
+    Title = "Refresh Directory",
+    Icon = "solar:refresh-bold",
+    Callback = function()
+        PlayerDropdown:Refresh(GetPlayerNames())
+        WindUI:Notify({ Title = "Teleportation", Content = "Active player directory updated successfully." })
+    end
+})
+
+TPTab:Button({
+    Title = "Execute Relocation",
+    Icon = "solar:rocket-bold",
+    Callback = function()
+        if tpTargetName ~= "" then
+            local targetPlr = Players:FindFirstChild(tpTargetName)
+            if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") then
+                local myChar = lp.Character
+                if myChar and myChar:FindFirstChild("HumanoidRootPart") then
+                    myChar.HumanoidRootPart.CFrame = targetPlr.Character.HumanoidRootPart.CFrame * CFrame.new(0, 3, 0)
+                    WindUI:Notify({ Title = "Teleportation", Content = "Successfully relocated to: " .. targetPlr.Name })
+                end
+            end
+        else
+            WindUI:Notify({ Title = "Execution Error", Content = "No valid target profile selected." })
+        end
+    end
+})
+
+-- =================================================================
+-- [ MODULE 3: ELEMENTAL MYSTERY SPELLS ]
+-- =================================================================
+local PowersTab = Window:Tab({ Title = "Powers", Icon = "solar:magic-stick-bold" })
 
 local powers = {
     ["Water"] = {"Jellyfish", "Bubbles", "Aqua Trident", "Big Tsunami", "Water Beam", "Bubble Dash"},
@@ -51,95 +226,129 @@ local powers = {
 }
 
 for category, list in pairs(powers) do
-    PowersTab:CreateSection(category)
+    PowersTab:Section({ Title = category })
     for _, skill in ipairs(list) do
-        PowersTab:CreateButton({
-            Name = skill,
+        PowersTab:Button({
+            Title = skill,
             Callback = function()
-                if Remote then
-                    Remote:FireServer("equip_mystery_spell", skill)
-                end
+                if Remote then Remote:FireServer("equip_mystery_spell", skill) end
             end
         })
     end
 end
 
--- ================= REBIRTH TAB =================
-local RebirthTab = Window:CreateTab("Rebirth & Special", 4483362458)
-
+-- =================================================================
+-- [ MODULE 4: REBIRTH ADVANCED MASTERY ]
+-- =================================================================
+local RebirthTab = Window:Tab({ Title = "Rebirth", Icon = "solar:refresh-bold" })
 local rebirthSkills = {
-    "Draedon's Tech", "Elysian Beam", "Bubble Flail", 
-    "Halloween Sword", "Poison Serpent", "Dark Flames", "Yoru", 
-    "Plasma Orbs", "Red Saucer", "Undead Staff", "Cruel Sun", "Cold Slap", "Time Slap",
+    "Draedon's Tech", "Elysian Beam", "Bubble Flail", "Halloween Sword", 
+    "Poison Serpent", "Dark Flames", "Yoru", "Plasma Orbs", "Red Saucer", 
+    "Undead Staff", "Cruel Sun", "Cold Slap", "Time Slap","Sonar",
 }
 
-RebirthTab:CreateSection("Special / Rebirth Skills")
+RebirthTab:Section({ Title = "Special & Rebirth Tier Skills" })
 for _, skill in ipairs(rebirthSkills) do
-    RebirthTab:CreateButton({
-        Name = skill,
+    RebirthTab:Button({
+        Title = skill,
         Callback = function()
             if Remote then
                 Remote:FireServer("equip_mystery_spell", skill)
-                Rayfield:Notify({
-                    Title = "KietHub",
-                    Content = "Equipped: " .. skill,
-                    Duration = 2
-                })
+                WindUI:Notify({ Title = "KietHub Systems", Content = "Equipped Legacy Skill: " .. skill })
             end
         end
     })
 end
 
--- ================= PLAYER TAB =================
-local PlayerTab = Window:CreateTab("Player", 4483345998)
-local currentSpeed = 16
-local currentJump = 50
-local lockSpeed = false
-local lockJump = false
+-- =================================================================
+-- [ MODULE 5: VISUAL RECONNAISSANCE (ESP) ]
+-- =================================================================
+local VisualsTab = Window:Tab({ Title = "Visuals", Icon = "solar:eye-bold" })
 
-PlayerTab:CreateSlider({
-    Name = "WalkSpeed", Range = {16, 500}, Increment = 1, Suffix = " Speed", CurrentValue = 16,
-    Callback = function(Value)
-        currentSpeed = Value
-        local hum = getHumanoid()
-        if hum then hum.WalkSpeed = Value end
-    end,
-})
-
-PlayerTab:CreateSlider({
-    Name = "JumpPower", Range = {50, 500}, Increment = 1, Suffix = " Power", CurrentValue = 50,
-    Callback = function(Value)
-        currentJump = Value
-        local hum = getHumanoid()
-        if hum then hum.JumpPower = Value end
-    end,
-})
-
-PlayerTab:CreateToggle({
-    Name = "Lock WalkSpeed", CurrentValue = false,
-    Callback = function(Value) lockSpeed = Value end,
-})
-
-PlayerTab:CreateToggle({
-    Name = "Lock JumpPower", CurrentValue = false,
-    Callback = function(Value) lockJump = Value end,
-})
-
--- Handle speed/jump locking
-RunService.Stepped:Connect(function()
-    local char = lp.Character
-    if char then
-        local hum = char:FindFirstChildOfClass("Humanoid")
-        if hum then
-            if lockSpeed then hum.WalkSpeed = currentSpeed end
-            if lockJump then hum.JumpPower = currentJump end
+local function CreateESP(plr)
+    task.spawn(function()
+        while plr.Parent and ESP_Enabled do
+            task.wait(0.5)
+            if plr.Character and plr ~= lp then
+                if not plr.Character:FindFirstChild("IY_ESP") then
+                    local h = Instance.new("Highlight", plr.Character)
+                    h.Name = "IY_ESP"
+                    h.FillColor = Color3.fromRGB(255, 0, 0)
+                    h.FillTransparency = 0.5
+                end
+                if ESP_Names and not plr.Character.Head:FindFirstChild("IY_Name") then
+                    local b = Instance.new("BillboardGui", plr.Character.Head)
+                    b.Name = "IY_Name"; b.AlwaysOnTop = true; b.Size = UDim2.new(0, 100, 0, 50)
+                    local l = Instance.new("TextLabel", b)
+                    l.Text = plr.Name; l.Size = UDim2.new(1, 0, 1, 0); l.BackgroundTransparency = 1; l.TextColor3 = Color3.new(1, 1, 1)
+                end
+            end
         end
+    end)
+end
+
+VisualsTab:Section({ Title = "Render Core Configuration" })
+VisualsTab:Toggle({
+    Title = "Master ESP (Highlighter)",
+    Callback = function(v) 
+        ESP_Enabled = v 
+        if v then for _, p in pairs(Players:GetPlayers()) do CreateESP(p) end end
+    end
+})
+VisualsTab:Toggle({ Title = "Render Name Tags", Callback = function(v) ESP_Names = v end })
+
+-- =================================================================
+-- [ MODULE 6: PHYSICAL ATTRIBUTE MODIFIERS ]
+-- =================================================================
+local PlayerTab = Window:Tab({ Title = "Player", Icon = "solar:user-bold" })
+
+PlayerTab:Section({ Title = "Movement Vector Alteration" })
+
+PlayerTab:Slider({
+    Title = "WalkSpeed Velocity",
+    Step = 1,
+    Value = { Min = 16, Max = 500, Default = 16 },
+    Callback = function(v) currentSpeed = v end
+})
+
+PlayerTab:Slider({
+    Title = "JumpPower Amplitude",
+    Step = 1,
+    Value = { Min = 50, Max = 500, Default = 50 },
+    Callback = function(v) currentJump = v end
+})
+
+PlayerTab:Toggle({ Title = "Constrain WalkSpeed", Callback = function(v) lockSpeed = v end })
+PlayerTab:Toggle({ Title = "Constrain JumpPower", Callback = function(v) lockJump = v end })
+
+-- =================================================================
+-- [ MODULE 7: INTERFACE ENVIRONMENT SETTINGS ]
+-- =================================================================
+local SettingsTab = Window:Tab({ Title = "Settings", Icon = "solar:settings-bold" })
+
+SettingsTab:Button({
+    Title = "Unload Interface",
+    Desc = "Completely terminate execution and clear graphical interface components",
+    Color = Color3.fromHex("#FF4B30"),
+    Callback = function()
+        Window:Destroy()
+        if MobileToggle then MobileToggle:Destroy() end -- Tự động hủy nút nổi khi tắt giải thuật
+    end
+})
+
+-- // [ Runtime Automation Hook Handlers ]
+RunService.Stepped:Connect(function()
+    if lp.Character and lp.Character:FindFirstChild("Humanoid") then
+        local hum = lp.Character.Humanoid
+        if lockSpeed then hum.WalkSpeed = currentSpeed end
+        if lockJump then hum.JumpPower = currentJump end
     end
 end)
 
-Rayfield:LoadConfiguration()
-Rayfield:Notify({
-    Title = "KietHub Updated",
-    Content = "Version 1.7 Ready!",
+Window:SelectTab(1)
+
+WindUI:Notify({
+    Title = "KietHub Suite Loaded",
+    Content = "Cross-Platform systems initialized. Tap 'K' button or press [RightCtrl] to toggle visibility.",
     Duration = 5
 })
