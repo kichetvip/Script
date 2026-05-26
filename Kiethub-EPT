@@ -244,7 +244,7 @@ local RebirthTab = Window:Tab({ Title = "Rebirth", Icon = "solar:refresh-bold" }
 local rebirthSkills = {
     "Draedon's Tech", "Elysian Beam", "Bubble Flail", "Halloween Sword", 
     "Poison Serpent", "Dark Flames", "Yoru", "Plasma Orbs", "Red Saucer", 
-    "Undead Staff", "Cruel Sun", "Cold Slap", "Time Slap","Sonar","Robux Beam",
+    "Undead Staff", "Cruel Sun", "Cold Slap", "Time Slap","Sonar",
 }
 
 RebirthTab:Section({ Title = "Special & Rebirth Tier Skills" })
